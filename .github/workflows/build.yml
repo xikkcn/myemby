@@ -20,6 +20,10 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - name: 下载代理核心（Xray / sing-box）
+        run: node vendor/dl.mjs
+        env:
+          MYEMBY_DL_PREFER_DIRECT: '1'
       - run: npx vite build
       - name: electron-builder (win)
         run: npx electron-builder --win --publish never
@@ -33,6 +37,8 @@ jobs:
   # ---------------- Linux（AppImage / deb 只能在 Linux 上构建）----------------
   linux:
     runs-on: ubuntu-latest
+    env:
+      ELECTRON_BUILDER_BINARIES_MIRROR: https://npmmirror.com/mirrors/electron-builder-binaries/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -40,19 +46,22 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - name: 下载代理核心（Xray / sing-box）
+        run: node vendor/dl.mjs
+        env:
+          MYEMBY_DL_PREFER_DIRECT: '1'
       - run: npx vite build
       - name: electron-builder (linux)
-        run: npx electron-builder --linux AppImage deb --publish never
-        env:
-          ELECTRON_BUILDER_BINARIES_MIRROR: https://npmmirror.com/mirrors/electron-builder-binaries/
+        run: npx electron-builder --linux AppImage deb tar.gz --publish never
       - uses: actions/upload-artifact@v4
         with:
           name: linux
           path: |
             dist_electron/*.AppImage
             dist_electron/*.deb
+            dist_electron/*.tar.gz
 
-  # ---------------- Android（手机 + TV）----------------
+  # ---------------- Android（手机 + TV，各含现代 / 兼容老设备两版）----------------
   android:
     runs-on: ubuntu-latest
     steps:
@@ -69,13 +78,24 @@ jobs:
         with:
           packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
       - run: npm ci
+      - name: 下载代理核心（Xray / sing-box）
+        run: node vendor/dl.mjs
+        env:
+          MYEMBY_DL_PREFER_DIRECT: '1'
       - run: npx vite build
       - run: npx cap sync android
-      - name: Gradle build（现代版 + 旧安卓兼容版）
+      - name: 把核心放进 jniLibs
+        run: node vendor/prepare.mjs
+      - name: Gradle build（手机 / TV × 现代 / 兼容老设备，共 4 个包）
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease assembleLegacyRelease --no-daemon
+          ./gradlew \
+            assembleModernPhoneRelease assembleModernTvRelease \
+            assembleLegacyPhoneRelease assembleLegacyTvRelease \
+            -x lintVitalModernPhoneRelease -x lintVitalModernTvRelease \
+            -x lintVitalLegacyPhoneRelease -x lintVitalLegacyTvRelease \
+            --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: android
@@ -93,7 +113,8 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: artifacts/**/*
-          generate_release_notes: true
+          generate_release_notes: false
+          body_path: docs/release-notes.md
 
   # ---------------- 网页端：部署到 GitHub Pages ----------------
   pages:

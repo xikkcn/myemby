@@ -43,3 +43,14 @@ yarn-error.log*
 .cache/
 .npm/
 .yarn/
+
+# 代理核心二进制（体积大，构建前用 vendor/dl.mjs 自动下载）
+vendor/bin/
+
+# 发布 / 截图辅助脚本与日志
+_publish.js
+_publish.log
+_capture.js
+_capture.log
+_shot.js
+_shot.log

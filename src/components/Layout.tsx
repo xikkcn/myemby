@@ -14,6 +14,7 @@ import {
   DownOutlined,
   LoginOutlined,
   FolderOpenOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useEmbyStore } from '../stores/embyStore';
@@ -220,6 +221,11 @@ const Layout: React.FC = () => {
       key: '/history',
       icon: <HistoryOutlined />,
       label: '播放历史',
+    },
+    {
+      key: '/proxy',
+      icon: <ThunderboltOutlined />,
+      label: '网络加速',
     },
     {
       key: '/settings',

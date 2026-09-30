@@ -1,0 +1,278 @@
+// 网络加速页（浅色主题）
+
+.proxy-container {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+
+  &.tv {
+    padding: 32px 40px;
+    max-width: 1280px;
+
+    .overview-title {
+      font-size: 30px;
+    }
+    .overview-desc {
+      font-size: 17px;
+    }
+    .node-item {
+      padding: 16px 18px;
+    }
+    .node-name {
+      font-size: 20px;
+    }
+    .proxy-logs {
+      font-size: 15px;
+      max-height: 260px;
+    }
+  }
+}
+
+.proxy-alert {
+  margin-bottom: 16px;
+  border-radius: 8px;
+}
+
+.proxy-card {
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid #ebeef5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+
+  .ant-card-head {
+    border-bottom: 1px solid #f0f2f5;
+    min-height: 52px;
+  }
+  .ant-card-head-title {
+    font-weight: 600;
+    color: #1f2d3d;
+  }
+}
+
+// ------------------------------------------------ 总览卡片
+
+.overview-card {
+  .overview-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .overview-left {
+    min-width: 0;
+  }
+
+  .overview-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #1f2d3d;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .anticon {
+      color: #1890ff;
+    }
+  }
+
+  .overview-desc {
+    margin-top: 6px;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .overview-right {
+    flex: none;
+  }
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px dashed #ebeef5;
+
+  .status-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .label {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.45);
+    }
+    .value {
+      font-size: 15px;
+      color: #1f2d3d;
+      font-weight: 500;
+      word-break: break-all;
+    }
+  }
+}
+
+.core-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+
+  .label {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  .port-edit {
+    margin-left: auto;
+  }
+}
+
+.core-avail {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+// ------------------------------------------------ 节点列表
+
+.node-list {
+  .node-item {
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.18s ease, box-shadow 0.18s ease;
+    border: 1px solid transparent;
+
+    &:hover {
+      background: #f7f9fc;
+    }
+
+    &.active {
+      background: #eaf4ff;
+      border-color: #bcdcff;
+
+      .node-name {
+        color: #1677ff;
+      }
+    }
+
+    .ant-list-item-meta {
+      margin-bottom: 0;
+      align-items: center;
+    }
+
+    .node-name {
+      font-weight: 500;
+      color: #1f2d3d;
+    }
+
+    .ant-list-item-meta-description {
+      font-size: 12px;
+      color: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .delay {
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    min-width: 58px;
+    text-align: right;
+    color: rgba(0, 0, 0, 0.5);
+
+    &.green {
+      color: #389e0d;
+    }
+    &.orange {
+      color: #d46b08;
+    }
+    &.volcano {
+      color: #d4380d;
+    }
+    &.red {
+      color: #cf1322;
+    }
+  }
+}
+
+// ------------------------------------------------ 订阅
+
+.sub-list {
+  margin-top: 18px;
+  border-top: 1px dashed #ebeef5;
+  padding-top: 8px;
+
+  .sub-header {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  .sub-desc {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+.hint {
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+}
+
+// ------------------------------------------------ 日志
+
+.proxy-logs {
+  margin: 0;
+  padding: 12px 14px;
+  background: #f7f9fc;
+  border: 1px solid #ebeef5;
+  border-radius: 8px;
+  font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: #445;
+  max-height: 220px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+// ------------------------------------------------ TV 扫码弹窗
+
+.tv-config-modal {
+  .qr-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0 4px;
+  }
+
+  .qr-box {
+    padding: 14px;
+    background: #fff;
+    border: 1px solid #ebeef5;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .qr-url {
+    font-family: 'Cascadia Mono', Consolas, monospace;
+    font-size: 13px;
+    color: #1890ff;
+    word-break: break-all;
+    text-align: center;
+  }
+
+  .qr-steps {
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 13px;
+    line-height: 1.9;
+    margin: 0;
+    padding-left: 18px;
+  }
+}

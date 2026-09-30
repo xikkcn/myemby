@@ -1,0 +1,43 @@
+// 电视端「手机扫码配置」弹窗（浅色主题）
+
+.tv-config-modal {
+  .tv-loading {
+    padding: 48px 0;
+    text-align: center;
+  }
+
+  .qr-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0 4px;
+  }
+
+  .qr-box {
+    padding: 14px;
+    background: #fff;
+    border: 1px solid #ebeef5;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    line-height: 0;
+  }
+
+  .qr-url {
+    font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+    font-size: 13px;
+    color: #1890ff;
+    word-break: break-all;
+    text-align: center;
+    user-select: all;
+  }
+
+  .qr-steps {
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 13px;
+    line-height: 1.9;
+    margin: 0;
+    padding-left: 18px;
+    align-self: stretch;
+  }
+}

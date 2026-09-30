@@ -17,3 +17,24 @@ interface Window {
     Plugins?: Record<string, any>;
   };
 }
+
+/** qrcode 库没有随包提供类型定义，这里做最小声明 */
+declare module 'qrcode' {
+  export interface QRCodeRenderOptions {
+    width?: number;
+    margin?: number;
+    scale?: number;
+    errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H';
+    color?: { dark?: string; light?: string };
+    type?: string;
+  }
+  export function toDataURL(text: string, options?: QRCodeRenderOptions): Promise<string>;
+  export function toString(text: string, options?: QRCodeRenderOptions): Promise<string>;
+  export function toCanvas(canvas: unknown, text: string, options?: QRCodeRenderOptions): Promise<void>;
+  const _default: {
+    toDataURL: typeof toDataURL;
+    toString: typeof toString;
+    toCanvas: typeof toCanvas;
+  };
+  export default _default;
+}

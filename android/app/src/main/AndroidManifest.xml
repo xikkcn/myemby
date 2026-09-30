@@ -31,7 +31,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
             android:launchMode="singleTask"
-            android:screenOrientation="unspecified"
+            android:screenOrientation="${orientation}"
             android:exported="true">
 
             <!-- 手机桌面图标 + 电视 Leanback 启动器，共用同一个入口 -->

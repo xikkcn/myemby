@@ -1,6 +1,6 @@
 {
   "name": "myemby",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "myemby（我的EMBY）— 轻量、干净的 Emby 客户端，支持 Windows / Linux / Android 手机 / Android TV / 网页端",
   "main": "main.js",
   "author": "xikkcn",
@@ -38,6 +38,7 @@
     "axios": "^1.4.0",
     "crypto-js": "^4.1.1",
     "hls.js": "^1.6.2",
+    "qrcode": "^1.5.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0",
@@ -67,6 +68,7 @@
     "files": [
       "dist/**/*",
       "main.js",
+      "main/**/*",
       "preload.js",
       "package.json",
       "!node_modules/**/*"
@@ -77,11 +79,25 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "extraResources": [
+        {
+          "from": "vendor/bin/xray.exe",
+          "to": "bin/xray.exe"
+        },
+        {
+          "from": "vendor/bin/sing-box.exe",
+          "to": "bin/sing-box.exe"
         }
       ]
     },
@@ -105,10 +121,23 @@
       "target": [
         {
           "target": "tar.gz",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
-      "artifactName": "myemby-${version}-linux-x64.${ext}"
+      "artifactName": "myemby-${version}-linux-x64.${ext}",
+      "extraResources": [
+        {
+          "from": "vendor/bin/xray",
+          "to": "bin/xray"
+        },
+        {
+          "from": "vendor/bin/sing-box",
+          "to": "bin/sing-box"
+        }
+      ],
+      "executableName": "myemby"
     }
   }
 }

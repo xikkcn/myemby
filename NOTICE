@@ -1,0 +1,59 @@
+myemby（我的EMBY）
+Copyright (C) 2026 xikkcn
+
+================================================================================
+本项目的许可证
+================================================================================
+
+myemby 本身采用 MIT 许可证发布，完整文本见 LICENSE 文件。
+
+项目中包含的、来自上游的代码：
+  - 基于 CodeCrafter-bit/emby-player（MIT）改造，原始版权声明已保留于 LICENSE。
+
+================================================================================
+内置的第三方代理核心（以独立程序方式调用）
+================================================================================
+
+myemby 的网络加速功能会调用两个独立的开源程序。它们**以独立可执行文件的形式**
+随安装包分发，本项目未修改、未链接、未合并其源代码，因此不构成衍生作品。
+
+1. Xray-core
+   项目地址: https://github.com/XTLS/Xray-core
+   许可证  : Mozilla Public License 2.0 (MPL-2.0)
+   用途    : 提供 VMess / VLESS / Trojan / Shadowsocks / SOCKS / HTTP 等协议的代理能力
+
+2. sing-box
+   项目地址: https://github.com/SagerNet/sing-box
+   许可证  : GNU General Public License v3.0 or later (GPL-3.0-or-later)
+   用途    : 提供 Hysteria2 / TUIC 等协议，以及完整的通用代理能力
+
+   由于 GPL-3.0 要求分发者提供对应源代码，sing-box 的完整源码可通过上述项目地址获取。
+   本项目对 sing-box 未做任何修改，分发的是其官方发布的预编译二进制文件。
+
+如需自行获取这些组件的源代码，请访问上面列出的项目地址。
+
+================================================================================
+其他开源组件
+================================================================================
+
+本项目还使用了以下开源软件（通过包管理器引入，各自遵循其原始许可证）：
+
+  Electron            MIT        https://github.com/electron/electron
+  React               MIT        https://github.com/facebook/react
+  Ant Design          MIT        https://github.com/ant-design/ant-design
+  Vite                MIT        https://github.com/vitejs/vite
+  video.js            Apache-2.0 https://github.com/videojs/video.js
+  hls.js              Apache-2.0 https://github.com/video-dev/hls.js
+  zustand             MIT        https://github.com/pmndrs/zustand
+  axios               MIT        https://github.com/axios/axios
+  Capacitor           MIT        https://github.com/ionic-team/capacitor
+  qrcode              MIT        https://github.com/soldair/node-qrcode
+
+完整的依赖清单与版本见 package.json 与 package-lock.json。
+
+================================================================================
+免责声明
+================================================================================
+
+本软件仅供个人学习与合法用途使用。使用者应自行了解并遵守所在地区关于
+网络工具的法律法规。因使用本软件产生的一切后果由使用者自行承担。
