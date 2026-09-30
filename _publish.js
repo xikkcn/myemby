@@ -93,6 +93,21 @@ function collectSourceFiles() {
 
 /** 用 Git Data API 一次性提交一批文件（支持二进制） */
 async function pushFilesApi(files, branch, message, ensureEmptyBranch) {
+  // GitHub 对「完全空的仓库」直接调 Git Data API 会返回 409，
+  // 先用 Contents API 造一个初始提交，之后就正常了。
+  const probe = await api('GET', `/repos/${OWNER}/${REPO}/git/ref/heads/${branch}`);
+  if (!probe.ok) {
+    const seedName = branch === 'main' ? 'README.md' : 'index.html';
+    const seedBody = branch === 'main' ? '# myemby\n' : '<!doctype html><title>myemby</title>';
+    const seed = await api('PUT', `/repos/${OWNER}/${REPO}/contents/${seedName}`, {
+      message: 'chore: 初始化分支',
+      content: Buffer.from(seedBody).toString('base64'),
+      branch,
+    });
+    if (!seed.ok) throw new Error('初始化分支失败: ' + seed.status + ' ' + seed.text);
+    log(`  已初始化分支 ${branch}`);
+  }
+
   const blobs = [];
   for (const f of files) {
     const buf = fs.readFileSync(f.full);
@@ -109,10 +124,8 @@ async function pushFilesApi(files, branch, message, ensureEmptyBranch) {
   if (!tree.ok) throw new Error('tree failed: ' + tree.status + ' ' + tree.text);
 
   const parents = [];
-  if (!ensureEmptyBranch) {
-    const ref = await api('GET', `/repos/${OWNER}/${REPO}/git/ref/heads/${branch}`);
-    if (ref.ok) parents.push(ref.data.object.sha);
-  }
+  const ref = await api('GET', `/repos/${OWNER}/${REPO}/git/ref/heads/${branch}`);
+  if (ref.ok) parents.push(ref.data.object.sha);
 
   const commit = await api('POST', `/repos/${OWNER}/${REPO}/git/commits`, {
     message,
@@ -127,10 +140,9 @@ async function pushFilesApi(files, branch, message, ensureEmptyBranch) {
   });
   if (refRes.ok) return commit.data.sha;
 
-  // 分支已存在则更新
   const upd = await api('PATCH', `/repos/${OWNER}/${REPO}/git/refs/heads/${branch}`, {
     sha: commit.data.sha,
-    force: false,
+    force: true,
   });
   if (!upd.ok) throw new Error('ref update failed: ' + upd.status + ' ' + upd.text);
   return commit.data.sha;
@@ -173,20 +185,29 @@ async function main() {
 
   let pushed = false;
   if (mainEmpty) {
+    const remote = `https://${encodeURIComponent(OWNER)}:${TOKEN}@github.com/${OWNER}/${REPO}.git`;
     try {
-      const remote = `https://${encodeURIComponent(OWNER)}:${TOKEN}@github.com/${OWNER}/${REPO}.git`;
       try { git(['remote', 'remove', 'origin'], SRC_DIR); } catch (e) {}
       git(['remote', 'add', 'origin', remote], SRC_DIR);
       git(['add', '-A'], SRC_DIR);
       try {
         git(['-c', 'core.autocrlf=false', 'commit', '-m', 'feat: myemby 首个版本（五端同源）'], SRC_DIR);
       } catch (e) { log('没有新改动或提交失败（可忽略）'); }
-      git(['push', '-u', 'origin', 'HEAD:main'], SRC_DIR);
+
+      // github.com 走 git 协议时通时断，多试几次
+      for (let i = 1; i <= 5 && !pushed; i++) {
+        try {
+          git(['push', '-u', 'origin', 'HEAD:main'], SRC_DIR);
+          pushed = true;
+          log('git push 成功（第 ' + i + ' 次尝试）');
+        } catch (e) {
+          log(`git push 第 ${i} 次失败: ` + redact((e && (e.stderr || e.message)) || String(e)).slice(0, 160));
+          await sleep(5000 * i);
+        }
+      }
       git(['remote', 'set-url', 'origin', `https://github.com/${OWNER}/${REPO}.git`], SRC_DIR);
-      log('git push 成功');
-      pushed = true;
     } catch (e) {
-      log('git push 失败，回退 API:', redact((e && (e.stderr || e.message)) || String(e)).slice(0, 300));
+      log('git 流程异常:', redact((e && (e.stderr || e.message)) || String(e)).slice(0, 300));
     }
   } else {
     log('main 分支已存在，跳过源码推送（避免覆盖）');
