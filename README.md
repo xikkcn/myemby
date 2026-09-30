@@ -88,19 +88,16 @@ Android TV / 网页端**，五端界面一致、功能一致、改一处全端�
 ### Android 手机 / 平板 / Android TV
 
 **同一个 APK 手机和电视都能装** —— 已同时注册手机桌面图标与电视 Leanback 启动器，
-电视上会自动进入电视模式（遥控器方向键操作）。
+电视上会自动进入电视模式（遥控器方向键操作）。安装包约 5 MB，两个版本任选其一：
 
 | 文件 | 适用 |
 | --- | --- |
-| `myemby-v1.0.0-android-arm64-v8a.apk` | 64 位 ARM，近几年绝大多数手机与电视盒子 |
-| `myemby-v1.0.0-android-armeabi-v7a.apk` | 32 位 ARM，较老的机型与盒子（**老盒子优先选这个**） |
-| `myemby-v1.0.0-android-universal.apk` | 通用包，不确定机型时选它 |
-| `myemby-v1.0.0-android-legacy21-arm64-v8a.apk` | **Android 5.0 / 5.1 老设备专用**（minSdk 21） |
-| `myemby-v1.0.0-android-legacy21-armeabi-v7a.apk` | 同上，32 位老盒子首选 |
-| `myemby-v1.0.0-android-legacy21-universal.apk` | 同上，通用包 |
+| `myemby-v1.0.0-android.apk` | **推荐**。Android 5.1（API 22）及以上，覆盖绝大多数手机与电视盒子 |
+| `myemby-v1.0.0-android-legacy21.apk` | 老设备兼容版，最低支持 Android 5.0（API 21）。普通设备不需要 |
 
-> **怎么选**：普通手机/平板先试 `arm64-v8a`；老电视盒子（Android 5/6）用
-> `legacy21-armeabi-v7a`；实在不确定就用对应的 `universal`。
+> 应用内不含任何原生库，所有 CPU 架构通用，**不用挑 arm64 / armeabi**。
+>
+> **怎么选**：先装推荐的那个；只有在 Android 5.0 的老盒子上装不上时，才用 `legacy21` 版。
 
 ### 网页端（免安装，浏览器直接用）
 

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      Capacitor 内核声明的 minSdk 是 22（Android 5.1）。
+      legacy 风味想下探到 API 21（Android 5.0 老电视盒子），这里放行清单合并。
+      对 5.1 及以上完全无影响；5.0 设备能否正常运行取决于系统 API，属尽力而为。
+    -->
+    <uses-sdk tools:overrideLibrary="com.getcapacitor.android,com.capacitorjs.plugins.app,capacitor.cordova.android.plugins,org.apache.cordova" />
 
     <!-- 手机与电视都能装：不强制要求触摸屏，也不强制要求 leanback -->
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />

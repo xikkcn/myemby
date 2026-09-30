@@ -35,14 +35,15 @@
 
 ### Android 手机 / 平板 / TV
 
-同一个 APK **手机和电视都能装**（已同时注册桌面图标与电视 Leanback 启动器）。
+同一个 APK **手机和电视都能装**（已同时注册桌面图标与电视 Leanback 启动器），
+电视上会自动进入电视模式。安装包约 5 MB，两个版本任选其一：
 
-| 文件 | 适用 |
+| 文件 | 说明 |
 | --- | --- |
-| `myemby-v1.0.0-android-arm64-v8a.apk` | 64 位 ARM，近几年绝大多数手机与电视盒子 |
-| `myemby-v1.0.0-android-armeabi-v7a.apk` | 32 位 ARM，较老的机型与盒子 |
-| `myemby-v1.0.0-android-universal.apk` | 通用包，不确定机型时选它 |
-| `myemby-v1.0.0-android-legacy21-*.apk` | **Android 5.0 / 5.1 老电视盒子专用**（minSdk 21） |
+| `myemby-v1.0.0-android.apk` | **推荐**。Android 5.1（API 22）及以上 |
+| `myemby-v1.0.0-android-legacy21.apk` | 老设备兼容版，最低 Android 5.0（API 21），普通设备不需要 |
+
+> 应用内不含原生库，**所有 CPU 架构通用**，不用挑 arm64 / armeabi。
 
 ### 网页端（免安装）
 

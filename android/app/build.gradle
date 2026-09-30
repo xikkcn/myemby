@@ -54,24 +54,16 @@ android {
         }
     }
 
-    // 按 CPU 架构拆分，另外保留一个通用包
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'arm64-v8a', 'armeabi-v7a'
-            universalApk true
-        }
-    }
+    // 说明：本项目是 Capacitor/WebView 应用，不含任何原生 .so 库，
+    // 因此不做 ABI 拆分（拆分出来的包会完全一样）。
+    // 设备兼容性靠下面的 modern / legacy 两个风味区分。
 
     // 输出文件名统一成可读的名字
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            def abi = output.getFilter(com.android.build.OutputFile.ABI)
-            def abiName = abi ?: 'universal'
             def flavor = variant.flavorName
             def suffix = (flavor == 'legacy') ? '-legacy21' : ''
-            outputFileName = "myemby-v${variant.versionName}-android${suffix}-${abiName}.apk"
+            outputFileName = "myemby-v${variant.versionName}-android${suffix}.apk"
         }
     }
 
