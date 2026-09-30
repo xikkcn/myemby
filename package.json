@@ -1,0 +1,115 @@
+{
+  "name": "myemby",
+  "version": "1.0.0",
+  "description": "myemby（我的EMBY）— 轻量、干净的 Emby 客户端，支持 Windows / Linux / Android 手机 / Android TV / 网页端",
+  "main": "main.js",
+  "author": "xikkcn",
+  "license": "MIT",
+  "keywords": [
+    "emby",
+    "emby-client",
+    "media-player",
+    "electron",
+    "react",
+    "typescript",
+    "capacitor",
+    "android-tv",
+    "video-player",
+    "hls"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "electron .",
+    "electron:dev": "cross-env NODE_ENV=development electron .",
+    "electron:build:win": "vite build && electron-builder --win",
+    "electron:build:linux": "vite build && electron-builder --linux",
+    "electron:build": "vite build && electron-builder --win --linux",
+    "cap:sync": "vite build && cap sync android",
+    "cap:open": "cap open android"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.2.0",
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/app": "^6.0.2",
+    "@capacitor/core": "^6.2.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "antd": "^5.7.0",
+    "axios": "^1.4.0",
+    "crypto-js": "^4.1.1",
+    "hls.js": "^1.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0",
+    "video.js": "^8.4.0",
+    "zustand": "^4.3.8"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "@types/crypto-js": "^4.1.1",
+    "@types/react": "^18.2.14",
+    "@types/react-dom": "^18.2.6",
+    "@vitejs/plugin-react": "^4.0.0",
+    "cross-env": "^7.0.3",
+    "electron": "^25.5.0",
+    "electron-builder": "^24.6.3",
+    "sass": "^1.86.3",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.0"
+  },
+  "build": {
+    "appId": "com.myemby.app",
+    "productName": "myemby",
+    "directories": {
+      "output": "dist_electron",
+      "buildResources": "buildResources"
+    },
+    "files": [
+      "dist/**/*",
+      "main.js",
+      "preload.js",
+      "package.json",
+      "!node_modules/**/*"
+    ],
+    "asar": true,
+    "win": {
+      "icon": "buildResources/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "myemby",
+      "artifactName": "myemby-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "myemby-Portable-${version}.${ext}"
+    },
+    "linux": {
+      "icon": "buildResources/icons",
+      "category": "AudioVideo",
+      "synopsis": "轻量干净的 Emby 客户端",
+      "description": "myemby（我的EMBY）— 支持 Windows / Linux / Android 手机 / Android TV / 网页端的 Emby 客户端。",
+      "target": [
+        {
+          "target": "tar.gz",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "myemby-${version}-linux-x64.${ext}"
+    }
+  }
+}

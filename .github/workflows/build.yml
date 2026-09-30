@@ -1,0 +1,121 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # ---------------- Windows ----------------
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx vite build
+      - name: electron-builder (win)
+        run: npx electron-builder --win --publish never
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            dist_electron/*.exe
+            dist_electron/*.blockmap
+
+  # ---------------- Linux（AppImage / deb 只能在 Linux 上构建）----------------
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx vite build
+      - name: electron-builder (linux)
+        run: npx electron-builder --linux AppImage deb --publish never
+        env:
+          ELECTRON_BUILDER_BINARIES_MIRROR: https://npmmirror.com/mirrors/electron-builder-binaries/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: |
+            dist_electron/*.AppImage
+            dist_electron/*.deb
+
+  # ---------------- Android（手机 + TV）----------------
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
+      - run: npm ci
+      - run: npx vite build
+      - run: npx cap sync android
+      - name: Gradle build（现代版 + 旧安卓兼容版）
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease assembleLegacyRelease --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: android/app/build/outputs/apk/**/*.apk
+
+  # ---------------- 汇总到 Release ----------------
+  release:
+    needs: [windows, linux, android]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
+          generate_release_notes: true
+
+  # ---------------- 网页端：部署到 GitHub Pages ----------------
+  pages:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx vite build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/renderer
+      - id: deployment
+        uses: actions/deploy-pages@v4

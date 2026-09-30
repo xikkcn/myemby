@@ -1,0 +1,38 @@
+@use '../styles/variables' as *;
+
+.recent-container {
+  padding: 20px;
+  
+  h2 {
+    margin-bottom: 20px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+  }
+  
+  .ant-card {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    
+    .ant-card-meta-title {
+      color: rgba(0, 0, 0, 0.85);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .ant-card-meta-description {
+      color: rgba(0, 0, 0, 0.45);
+    }
+  }
+  
+  img {
+    height: 225px;
+    object-fit: cover;
+  }
+} 

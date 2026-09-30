@@ -1,0 +1,638 @@
+.player-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: #000;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* 顶部导航栏 */
+.player-header {
+  width: 100%;
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 10;
+}
+
+/* 顶部导航栏左侧部分 */
+.player-header-left {
+  display: flex;
+  align-items: center;
+}
+
+/* 当前格式指示器 */
+.player-format-indicator {
+  color: white;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+/* 视频内容区域 */
+.player-content {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 100px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* 视频容器 */
+.player-video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* 加载状态 - 保留唯一的缓冲图标 */
+.player-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  z-index: 5 !important;
+  font-size: 16px;
+}
+
+/* 错误状态 */
+.player-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.player-error h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #ff4d4f;
+}
+
+.player-error-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+/* VideoJS 样式覆盖 */
+.video-js {
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 2;
+}
+
+/* 进度条样式优化 */
+.video-js .vjs-progress-control {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0.3em;
+  padding: 0;
+  margin: 0;
+  z-index: 3;
+}
+
+.video-js .vjs-progress-control .vjs-progress-holder {
+  height: 0.3em;
+  margin: 0;
+  border-radius: 0;
+}
+
+.video-js .vjs-play-progress {
+  background-color: #1890ff !important;
+}
+
+.video-js .vjs-slider-bar {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.video-js .vjs-load-progress {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.video-js .vjs-big-play-button {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  border-color: #1890ff;
+  border-radius: 50%;
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  font-size: 2.5em;
+  z-index: 3 !important;
+}
+
+.video-js:hover .vjs-big-play-button {
+  background-color: rgba(24, 144, 255, 0.8);
+  transform: translate(-50%, -50%) scale(1.1);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.video-js .vjs-control-bar {
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3em;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 3 !important;
+}
+
+/* 视频控制器交互优化 */
+.video-js.vjs-user-inactive:not(.vjs-paused) .vjs-control-bar {
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition-delay: 0.2s;
+}
+
+.video-js.vjs-user-active .vjs-control-bar,
+.video-js.vjs-paused .vjs-control-bar {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition-delay: 0s;
+}
+
+/* 确保鼠标移动到控制栏上时保持显示 */
+.video-js .vjs-control-bar:hover {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  visibility: visible !important;
+}
+
+/* 优化播放器内各控制按钮的交互体验 */
+.video-js .vjs-control:hover {
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 当控制栏隐藏时，在鼠标移入视频区域时显示控制栏预览 */
+.video-js.vjs-user-inactive:not(.vjs-paused):hover .vjs-control-bar {
+  transform: translateY(calc(100% - 5px));
+  opacity: 0.5;
+  transition-delay: 0s;
+}
+
+/* 全屏时额外样式 */
+.video-js.vjs-fullscreen {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100vh;
+  max-width: 100vw;
+}
+
+.video-js.vjs-fullscreen .vjs-tech {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+
+/* 视频播放器内部的video元素样式 */
+.video-js video,
+.video-js .vjs-tech {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  max-height: 100vh;
+  max-width: 100vw;
+}
+
+/* 键盘快捷键提示样式 */
+.player-shortcuts-hint {
+  width: 100%;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  line-height: 40px;
+  font-size: 14px;
+  z-index: 10;
+}
+
+/* 适应小屏幕 */
+@media (max-width: 768px) {
+  .player-header {
+    height: 50px;
+    padding: 0 10px;
+  }
+  
+  .player-content {
+    height: calc(100vh - 90px);
+  }
+  
+  .player-header-left .ant-btn span:not(.anticon) {
+    display: none;
+  }
+  
+  .player-format-indicator {
+    font-size: 12px;
+    max-width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .player-shortcuts-hint {
+    font-size: 12px;
+  }
+  
+  .vjs-big-play-centered .vjs-big-play-button {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    font-size: 30px;
+  }
+}
+
+/* 移除重复样式 */
+.loading-overlay,
+.error-container,
+.error-message,
+.player-wrapper {
+  display: none; /* 不再需要这些类，使用新的类替代 */
+}
+
+/* 自适应视频模式 */
+.vjs-fluid {
+  padding-top: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 确保全屏模式正常工作 */
+.video-js.vjs-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+}
+
+/* 自定义播放器控件样式 */
+.video-js .vjs-big-play-button {
+  background-color: rgba(43, 51, 63, 0.7);
+  border-color: #1890ff;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.video-js:hover .vjs-big-play-button,
+.video-js .vjs-big-play-button:focus {
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+/* 防止播放器元素重复初始化 */
+#emby-video-player {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+}
+
+/* 确保播放器内部元素不会消失，但隐藏默认加载图标 */
+.video-js .vjs-text-track-display,
+.video-js .vjs-big-play-button,
+.video-js .vjs-poster,
+.video-js .vjs-control-bar {
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+  z-index: 3 !important;
+}
+
+/* 隐藏VideoJS自带加载圈 */
+.video-js .vjs-loading-spinner {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* 播放状态下隐藏所有加载图标 */
+.video-js.vjs-playing ~ .player-loading,
+.video-js.vjs-has-started ~ .player-loading,
+body.video-playing-state .player-loading,
+body.video-ready .player-loading {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* 剧集选择抽屉样式 */
+.episodes-drawer .ant-drawer-body {
+  padding: 16px;
+  background-color: #141414;
+  color: #fff;
+}
+
+.episodes-drawer .ant-drawer-content {
+  background-color: #141414;
+}
+
+.episodes-drawer .ant-drawer-header {
+  background-color: #1f1f1f;
+  border-bottom: 1px solid #303030;
+}
+
+.episodes-drawer .ant-drawer-title {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.episodes-drawer .ant-drawer-close {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.episodes-drawer .ant-drawer-close:hover {
+  color: white;
+}
+
+.episodes-drawer .ant-collapse-ghost {
+  background-color: transparent;
+}
+
+.episodes-drawer .ant-collapse-header {
+  color: white !important;
+}
+
+.episodes-drawer .ant-collapse-content {
+  color: white;
+  background-color: #1a1a1a;
+}
+
+.episodes-drawer .ant-list-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 0;
+  cursor: pointer;
+}
+
+.episodes-drawer .ant-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.episodes-drawer .episode-item-active {
+  background-color: rgba(24, 144, 255, 0.3);
+}
+
+.episodes-drawer .ant-typography {
+  color: #fff !important;
+}
+
+.episodes-drawer .ant-typography.ant-typography-secondary {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* 让抽屉更加显眼，防止被视频遮挡 */
+.episodes-drawer {
+  z-index: 1100 !important;
+}
+
+.episode-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.episode-item:hover {
+  background-color: rgba(24, 144, 255, 0.2);
+}
+
+.episode-item-active {
+  background-color: rgba(24, 144, 255, 0.3);
+  border-left: 3px solid #1890ff;
+}
+
+/* 媒体项信息样式 */
+.media-info {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+  margin-right: 16px;
+}
+
+/* 确保视频元素始终可见 */
+#video-player {
+  display: block !important;
+  visibility: visible !important;
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+/* 播放器加载和错误状态下的大按钮 */
+.vjs-big-play-centered .vjs-big-play-button {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
+  font-size: 40px;
+  border: 3px solid white;
+}
+
+/* 确保按钮在顶部始终可点击 */
+.player-header-left .ant-btn {
+  z-index: 11;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin-right: 5px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.player-header-left .ant-btn:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* 播放按钮样式 */
+#prev-episode-btn, #next-episode-btn, #episode-list-btn {
+  height: 40px;
+  min-width: 40px;
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+#prev-episode-btn:hover, #next-episode-btn:hover, #episode-list-btn:hover {
+  background-color: rgba(24, 144, 255, 0.8);
+}
+
+/* 确保按钮图标可见 */
+.ant-btn .anticon {
+  font-size: 18px;
+}
+
+/* 底部剧集控制栏 */
+.player-bottom-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 50; /* 确保在video-js控制栏的上方 */
+  padding: 10px;
+  gap: 15px;
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+}
+
+.player-bottom-controls:hover {
+  opacity: 1;
+}
+
+.bottom-control-btn {
+  min-width: 100px;
+  height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* 视频播放器覆盖控制按钮 */
+.episode-controls-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 40;
+  pointer-events: none; /* 允许点击穿透到视频 */
+  padding: 0 20px;
+}
+
+.episode-controls-left,
+.episode-controls-right {
+  pointer-events: auto; /* 恢复按钮的点击 */
+  opacity: 0.2;
+  transition: opacity 0.3s ease;
+}
+
+.episode-controls-left:hover,
+.episode-controls-right:hover {
+  opacity: 1;
+}
+
+.episode-control-btn {
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.episode-controls-left .episode-control-btn {
+  margin-left: 50px;
+}
+
+.episode-controls-right .episode-control-btn {
+  margin-right: 50px;
+}
+
+/* 确保错误页面的操作按钮样式 */
+.player-error-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.player-error-actions > div {
+  display: flex;
+  gap: 10px;
+}
+
+/* 仅在播放时隐藏大播放按钮 */
+.video-js.vjs-playing .vjs-big-play-button {
+  display: none !important;
+}
+
+/* 添加更严格的选择器确保播放按钮在播放状态下隐藏 */
+.video-js.vjs-has-started.vjs-playing .vjs-big-play-button,
+.video-js.vjs-playing.vjs-user-active .vjs-big-play-button,
+.video-js.vjs-playing.vjs-user-inactive .vjs-big-play-button,
+.video-is-playing .video-js .vjs-big-play-button,
+body.video-playing-state .video-js .vjs-big-play-button,
+.player-video-container.video-is-playing .video-js .vjs-big-play-button {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 修改播放按钮样式，确保z-index正确 */
+.video-js .vjs-big-play-button {
+  font-size: 3em;
+  line-height: 1.5em;
+  height: 1.5em;
+  width: 1.5em;
+  border-radius: 50%;
+  background-color: rgba(43, 51, 63, 0.7);
+  border: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+} 

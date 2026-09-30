@@ -1,0 +1,120 @@
+@use '../styles/variables' as *;
+
+/* 首页顶部醒目推广条 */
+.promo-banner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  border-radius: 10px;
+  border: 1px solid rgba(24, 144, 255, 0.18);
+  background: linear-gradient(135deg, #f0f8ff 0%, #fff7e6 100%);
+  transition: box-shadow 0.25s, transform 0.25s;
+
+  &:hover {
+    box-shadow: 0 6px 18px rgba(24, 144, 255, 0.14);
+  }
+
+  .promo-icon {
+    font-size: 26px;
+    color: #fa8c16;
+    flex-shrink: 0;
+  }
+
+  .promo-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    gap: 2px;
+  }
+
+  .promo-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.88);
+  }
+
+  .promo-sub {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.45);
+  }
+
+  .promo-btn {
+    flex-shrink: 0;
+  }
+}
+
+/* 设置页 / 关于页的卡片式推广位 */
+.promo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .promo-card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .promo-icon {
+    font-size: 18px;
+    color: #fa8c16;
+  }
+
+  .promo-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.88);
+  }
+
+  .promo-card-desc {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .promo-btn {
+    align-self: flex-start;
+  }
+}
+
+/* 页脚一行文字 */
+.promo-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 0 4px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+
+  .promo-line-title {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.65);
+  }
+
+  a {
+    color: $primary-color;
+    word-break: break-all;
+  }
+}
+
+/* 电视模式：整体放大，方便远距离看清 */
+body.tv-mode {
+  .promo-banner {
+    padding: 20px 26px;
+    gap: 20px;
+
+    .promo-icon { font-size: 36px; }
+    .promo-title { font-size: 20px; }
+    .promo-sub { font-size: 16px; }
+    .promo-btn { height: 46px; font-size: 16px; padding: 0 26px; }
+  }
+
+  .promo-line {
+    font-size: 15px;
+    .promo-line-title { font-size: 16px; }
+  }
+}

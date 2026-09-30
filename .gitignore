@@ -1,0 +1,45 @@
+# 依赖
+node_modules/
+
+# 构建产物
+dist/
+dist_electron/
+dist_android/
+
+# Capacitor / Android
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+android/app/src/main/assets/public/
+android/app/src/main/res/xml/config.xml
+*.jks
+*.keystore
+# 例外：开源项目固定签名密钥，便于后续版本覆盖安装
+!android/app/myemby.keystore
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 编辑器
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 缓存
+.cache/
+.npm/
+.yarn/
