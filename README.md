@@ -130,8 +130,8 @@ Android TV / 网页端**，五端界面一致、功能一致、改一处全端�
 
 | 文件 | 说明 |
 | --- | --- |
-| `myemby-v1.0.2-phone.apk` | **手机 / 平板推荐**。Android 5.1（API 22）及以上。 |
-| `myemby-v1.0.2-phone-legacy21.apk` | 老机型兼容版，最低 Android 5.0（API 21），新设备不需要。 |
+| `myemby-1.0.2-phone.apk` | **手机 / 平板推荐**。Android 5.1（API 22）及以上。 |
+| `myemby-1.0.2-phone-legacy21.apk` | 老机型兼容版，最低 Android 5.0（API 21），新设备不需要。 |
 
 ### Android TV / 电视盒子
 
@@ -143,10 +143,10 @@ Android TV / 网页端**，五端界面一致、功能一致、改一处全端�
 
 | 文件 | 适用 | Android 版本 |
 | --- | --- | --- |
-| `myemby-v1.0.2-tv-arm64.apk` | **64 位电视 / 盒子（推荐）** | 5.1（API 22）+ |
-| `myemby-v1.0.2-tv-arm32.apk` | **32 位电视 / 老盒子** | 5.1（API 22）+ |
-| `myemby-v1.0.2-tv-arm64-legacy21.apk` | 64 位 + 老系统 | 5.0（API 21） |
-| `myemby-v1.0.2-tv-arm32-legacy21.apk` | 32 位 + 老系统 | 5.0（API 21） |
+| `myemby-1.0.2-tv-arm64.apk` | **64 位电视 / 盒子（推荐）** | 5.1（API 22）+ |
+| `myemby-1.0.2-tv-arm32.apk` | **32 位电视 / 老盒子** | 5.1（API 22）+ |
+| `myemby-1.0.2-tv-arm64-legacy21.apk` | 64 位 + 老系统 | 5.0（API 21） |
+| `myemby-1.0.2-tv-arm32-legacy21.apk` | 32 位 + 老系统 | 5.0（API 21） |
 
 > **怎么判断自己是 64 位还是 32 位**：装一个「AIDA64」或「DevCheck」之类的应用看一下 CPU 架构；
 > 或者直接先试 `arm64`，装不上（提示「应用未安装」或解析失败）就换 `arm32`。
