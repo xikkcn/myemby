@@ -231,3 +231,91 @@
     color: #1890ff;
   }
 }
+
+// ============================================================
+// 手机端：完全换一套骨架（顶栏精简 + 底部导航）
+// ============================================================
+
+.main-layout.mobile {
+  min-height: 100vh;
+  background: #f5f7fa;
+
+  .mobile-header {
+    position: sticky;
+    top: 0;
+    z-index: 800;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    height: 52px;
+    padding: 0 14px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid #ebeef5;
+  }
+
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+    cursor: pointer;
+
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+
+    .app-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2d3d;
+      letter-spacing: 0.3px;
+    }
+  }
+
+  .mobile-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .mobile-server-btn {
+    max-width: 42vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid #e4e9f0;
+    background: #f7f9fc;
+    color: #40506a;
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active {
+      background: #eef3fa;
+    }
+  }
+
+  // 给底部导航留出空间（含 iPhone 安全区）
+  .main-content.mobile-content {
+    padding: 12px 12px calc(72px + env(safe-area-inset-bottom, 0px));
+    margin: 0;
+    min-height: calc(100vh - 52px);
+    background: #f5f7fa;
+  }
+
+  // 播放页：沉浸式，不留底部导航
+  &.mobile-player {
+    .main-content.player-content {
+      padding: 0;
+      margin: 0;
+      min-height: 100vh;
+    }
+  }
+}

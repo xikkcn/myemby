@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Card, message, Switch, Space, Divider, List, Modal, Radio, Popconfirm, Typography } from 'antd';
+import { Form, Input, Button, Card, message, Switch, Space, Divider, List, Modal, Radio, Popconfirm, Typography, Slider } from 'antd';
 import { useEmbyStore } from '../stores/embyStore';
 import { useServerStore, ServerConfig } from '../stores/serverStore';
-import { PlusOutlined, EditOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { PlusOutlined, EditOutlined, DeleteOutlined, CheckOutlined, PlayCircleOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import Promo from '../components/Promo';
 import { APP_NAME, APP_NAME_CN, APP_VERSION, PROJECT } from '../config/promo';
 import { getPlatform, isTVMode, isTVAutoDetected, setTVMode } from '../platform';
+import { useDanmakuStore } from '../danmaku/store';
 import './Settings.scss';
 
 const { Title, Text } = Typography;
@@ -13,6 +15,9 @@ const { Title, Text } = Typography;
 const Settings: React.FC = () => {
   const { logout } = useEmbyStore();
   const { servers, addServer, updateServer, deleteServer, activeServerId, setActiveServer } = useServerStore();
+  const navigate = useNavigate();
+  const danmakuConfig = useDanmakuStore((st) => st.config);
+  const setDanmaku = useDanmakuStore((st) => st.setConfig);
   
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -236,6 +241,87 @@ const Settings: React.FC = () => {
         )}
       </Card>
       
+      <Card title="媒体源" className="settings-card">
+        <Space direction="vertical" style={{ width: '100%' }} size="middle">
+          <div className="setting-option">
+            <div className="setting-text">
+              <div className="setting-title">直播（IPTV）</div>
+              <div className="setting-desc">导入 M3U / TXT 频道表，看电视直播</div>
+            </div>
+            <Button icon={<PlayCircleOutlined />} onClick={() => navigate('/live')}>
+              管理
+            </Button>
+          </div>
+          <div className="setting-option">
+            <div className="setting-text">
+              <div className="setting-title">文件源（WebDAV）</div>
+              <div className="setting-desc">连接 Alist / 群晖 / 飞牛等 WebDAV，直接播放里面的视频</div>
+            </div>
+            <Button icon={<FolderOpenOutlined />} onClick={() => navigate('/files')}>
+              管理
+            </Button>
+          </div>
+          <div className="setting-option">
+            <div className="setting-text">
+              <div className="setting-title">弹幕</div>
+              <div className="setting-desc">播放时自动匹配弹弹Play 弹幕并叠加显示</div>
+            </div>
+            <Switch
+              checked={danmakuConfig.enabled}
+              onChange={(v) => setDanmaku({ enabled: v })}
+            />
+          </div>
+          {danmakuConfig.enabled && (
+            <>
+              <div className="setting-option">
+                <div className="setting-text">
+                  <div className="setting-title">弹幕透明度</div>
+                  <div className="setting-desc">{Math.round(danmakuConfig.opacity * 100)}%</div>
+                </div>
+                <Slider
+                  min={10}
+                  max={100}
+                  value={Math.round(danmakuConfig.opacity * 100)}
+                  onChange={(v) => setDanmaku({ opacity: v / 100 })}
+                  style={{ width: 160 }}
+                />
+              </div>
+              <div className="setting-option">
+                <div className="setting-text">
+                  <div className="setting-title">弹幕接口地址</div>
+                  <div className="setting-desc">默认弹弹Play 官方接口，可换成兼容服务</div>
+                </div>
+                <Input
+                  value={danmakuConfig.endpoint}
+                  onChange={(e) => setDanmaku({ endpoint: e.target.value })}
+                  style={{ width: 240 }}
+                />
+              </div>
+              <div className="setting-option">
+                <div className="setting-text">
+                  <div className="setting-title">AppId / AppSecret</div>
+                  <div className="setting-desc">留空则按匿名方式请求（兼容服务通常不校验）</div>
+                </div>
+                <Space>
+                  <Input
+                    placeholder="AppId"
+                    value={danmakuConfig.appId || ''}
+                    onChange={(e) => setDanmaku({ appId: e.target.value })}
+                    style={{ width: 108 }}
+                  />
+                  <Input.Password
+                    placeholder="AppSecret"
+                    value={danmakuConfig.appSecret || ''}
+                    onChange={(e) => setDanmaku({ appSecret: e.target.value })}
+                    style={{ width: 130 }}
+                  />
+                </Space>
+              </div>
+            </>
+          )}
+        </Space>
+      </Card>
+
       <Card title="应用设置" className="settings-card">
         <Form layout="vertical">
           <Form.Item label="播放设置">

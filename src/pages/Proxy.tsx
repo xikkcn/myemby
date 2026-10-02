@@ -63,6 +63,7 @@ const Proxy: React.FC = () => {
     enabled,
     preferredCore,
     localPort,
+    autoStart,
     status,
     latency,
     logs,
@@ -81,6 +82,7 @@ const Proxy: React.FC = () => {
     clearNodes,
     setPreferredCore,
     setLocalPort,
+    setAutoStart,
     clearLogs,
     clearError,
   } = useProxyStore();
@@ -226,6 +228,14 @@ const Proxy: React.FC = () => {
               onBlur={() => setLocalPort(parseInt(portInput, 10) || 20808)}
             />
           </Space>
+        </div>
+
+        <div className="core-row auto-row">
+          <span className="label">开机自动加速</span>
+          <Switch size="small" checked={autoStart} onChange={setAutoStart} />
+          <span className="hint">
+            启动时自动用上次的节点开启，电视上不用每次开机手动开
+          </span>
         </div>
 
         <div className="core-avail">

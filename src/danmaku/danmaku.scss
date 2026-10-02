@@ -1,0 +1,11 @@
+// 弹幕层：盖在播放器画面上，不拦截鼠标操作
+
+.danmaku-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; // 关键：不能挡住播放器控件
+  z-index: 20;
+}

@@ -21,6 +21,10 @@ import {
 import { useEmbyStore } from '../stores/embyStore';
 import { useServerStore } from '../stores/serverStore'; // 添加导入
 import SearchBar from '../components/SearchBar'; // 添加导入
+import DanmakuOverlay from '../danmaku/DanmakuOverlay';
+import PlayerGestures from '../components/PlayerGestures';
+import { useIsMobile } from '../platform/useMobile';
+import { useDanmakuStore } from '../danmaku/store';
 import Promo from '../components/Promo';
 import './Player.scss';
 import videojs from 'video.js';
@@ -735,6 +739,7 @@ const Player: React.FC = () => {
   const navigate = useNavigate();
   const { token, userId, getApiClient, isLoggedIn, username, login, logout } = useEmbyStore();
   const { servers, activeServerId, setActiveServer } = useServerStore(); // 添加state
+  const isMobile = useIsMobile();
   const [serverUrl, setServerUrl] = useState<string>('');
   const videoContainerRef = useRef<HTMLDivElement>(null);
   // 不再将videoElementRef作为React ref，而是普通变量，避免只读问题
@@ -3061,7 +3066,71 @@ const Player: React.FC = () => {
           </div>
         )}
               </div>
-      
+
+      {/* 弹幕层：盖在画面之上，不拦截点击 */}
+      <DanmakuOverlay
+        selector=".video-area"
+        playing={isPlaying}
+        title={isEpisode && itemInfo?.SeriesName ? itemInfo.SeriesName : itemInfo?.Name}
+        episodeHint={isEpisode ? itemInfo?.IndexNumber : undefined}
+        getTime={() => {
+          try {
+            const p: any = playerRef.current;
+            if (p && typeof p.currentTime === 'function') return p.currentTime() || 0;
+            return videoElementRef.current?.currentTime || 0;
+          } catch {
+            return 0;
+          }
+        }}
+      />
+
+      {/* 手机端播放手势：单击暂停、双击快进退、滑动调进度/音量/亮度 */}
+      {isMobile && (
+        <PlayerGestures
+          selector=".video-area"
+          getDuration={() => {
+            try {
+              const p: any = playerRef.current;
+              if (p && typeof p.duration === 'function') return p.duration() || 0;
+              return videoElementRef.current?.duration || 0;
+            } catch {
+              return 0;
+            }
+          }}
+          getTime={() => {
+            try {
+              const p: any = playerRef.current;
+              if (p && typeof p.currentTime === 'function') return p.currentTime() || 0;
+              return videoElementRef.current?.currentTime || 0;
+            } catch {
+              return 0;
+            }
+          }}
+          onSeek={(t) => {
+            try {
+              const p: any = playerRef.current;
+              if (p && typeof p.currentTime === 'function') p.currentTime(t);
+              else if (videoElementRef.current) videoElementRef.current.currentTime = t;
+            } catch {}
+          }}
+          onTogglePlay={() => {
+            try {
+              const p: any = playerRef.current;
+              if (!p) return;
+              if (p.paused()) p.play();
+              else p.pause();
+            } catch {}
+          }}
+          onVolume={(v) => {
+            try {
+              const p: any = playerRef.current;
+              if (p && typeof p.volume === 'function') p.volume(v);
+              if (videoElementRef.current) videoElementRef.current.volume = v;
+            } catch {}
+          }}
+        />
+      )}
+
       {/* 中间区域 - 视频信息详情 */}
       {itemInfo && !loading && (
         <div className="media-info-area">

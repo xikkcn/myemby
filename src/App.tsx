@@ -11,6 +11,8 @@ import Movies from './pages/Movies';
 import Series from './pages/Series';
 import Libraries from './pages/Libraries';
 import Proxy from './pages/Proxy';
+import Live from './pages/Live';
+import Files from './pages/Files';
 import Layout from './components/Layout';
 import ErrorBoundary from './components/ErrorBoundary';
 import { useEmbyStore } from './stores/embyStore';
@@ -27,17 +29,20 @@ const App: React.FC = () => {
   useEffect(() => {
     console.log('App组件 - 登录状态:', isLoggedIn, '服务器数量:', servers.length);
     
-    // 如果没有服务器配置，导航到设置页面（网络加速页允许停留，方便先配好代理）
+    // 这些页面不依赖 Emby 服务器，允许直接停留
+    const standalone = ['/settings', '/proxy', '/live', '/files'];
+
+    // 如果没有服务器配置，导航到设置页面
     if (servers.length === 0) {
       console.log('没有配置服务器，跳转到设置页面');
-      if (location.pathname !== '/settings' && location.pathname !== '/proxy') {
+      if (!standalone.includes(location.pathname)) {
         navigate('/settings', { replace: true });
       }
       return;
     }
     
     // 如果有服务器但未登录，且当前路径不是设置页面，导航到主页
-    if (!isLoggedIn && location.pathname !== '/settings' && location.pathname !== '/proxy') {
+    if (!isLoggedIn && !standalone.includes(location.pathname)) {
       console.log('未登录，跳转到主页');
       navigate('/', { replace: true });
     }
@@ -91,6 +96,8 @@ const App: React.FC = () => {
               <Route path="history" element={<History />} />
               <Route path="settings" element={<Settings />} />
               <Route path="proxy" element={<Proxy />} />
+              <Route path="live" element={<Live />} />
+              <Route path="files" element={<Files />} />
               <Route path="movies" element={<Movies />} />
               <Route path="series" element={<Series />} />
               <Route path="series/:id" element={<Series />} />

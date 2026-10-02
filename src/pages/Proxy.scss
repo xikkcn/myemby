@@ -276,3 +276,22 @@
     padding-left: 18px;
   }
 }
+
+// 开机自动加速一行
+.core-row.auto-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .label {
+    flex: none;
+    color: #5a6b85;
+    font-size: 13px;
+  }
+
+  .hint {
+    color: #93a1b5;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+}

@@ -54,3 +54,6 @@ _capture.js
 _capture.log
 _shot.js
 _shot.log
+
+# 本地验证脚本与截图（依赖本地模拟服务器，不属于项目本体）
+verify/

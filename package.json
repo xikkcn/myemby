@@ -1,6 +1,6 @@
 {
   "name": "myemby",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "myemby（我的EMBY）— 轻量、干净的 Emby 客户端，支持 Windows / Linux / Android 手机 / Android TV / 网页端",
   "main": "main.js",
   "author": "xikkcn",

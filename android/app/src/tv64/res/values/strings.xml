@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 电视端独立成包，应用名加以区分，方便在电视桌面上一眼找到 -->
+    <string name="app_name">myemby TV</string>
+    <string name="title_activity_main">myemby TV</string>
+</resources>

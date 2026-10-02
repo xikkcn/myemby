@@ -1,0 +1,295 @@
+/**
+ * 手机端全局适配
+ *
+ * 思路：桌面端的页面结构基本不动，只在窄屏下压缩间距、放大可点区域、
+ * 把会被截断的横向排列（筛选器、工具箱）改成换行流式布局。
+ */
+
+// 仅在手机宽度生效，桌面与电视端不受影响
+@media screen and (max-width: 767px) {
+  // ---------------- 通用 ----------------
+
+  // 手机上一律不要横向滚动
+  body,
+  .main-layout,
+  .main-content,
+  .home-container,
+  .movies-container,
+  .series-container,
+  .libraries-container,
+  .settings-container,
+  .proxy-container,
+  .history-container,
+  .recent-container {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  // 页面内边距压缩（Layout 已经给了底部导航的留白）
+  .home-container,
+  .movies-container,
+  .series-container,
+  .libraries-container,
+  .settings-container,
+  .proxy-container,
+  .history-container,
+  .recent-container {
+    padding: 0 !important;
+  }
+
+  // 卡片圆角与阴影收敛，避免小屏显得笨重
+  .ant-card {
+    border-radius: 10px;
+  }
+
+  .ant-card-body {
+    padding: 14px;
+  }
+
+  // 标题层级下压
+  h1,
+  .page-title {
+    font-size: 20px !important;
+  }
+
+  // ---------------- 首页 ----------------
+
+  .home-container {
+    .category-tabs {
+      margin-bottom: 14px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      // 分类标签不许换行、不许被压扁
+      > * {
+        flex: none;
+        white-space: nowrap;
+      }
+    }
+
+    .media-group {
+      margin-bottom: 20px;
+    }
+
+    .media-group-header {
+      margin-bottom: 10px;
+
+      .ant-typography,
+      h3 {
+        font-size: 16px !important;
+      }
+    }
+  }
+
+  // 海报卡片：小屏下文字要更小、更紧凑
+  .media-card {
+    border-radius: 8px;
+
+    .media-title,
+    .card-title {
+      font-size: 12px !important;
+      line-height: 1.35;
+      -webkit-line-clamp: 2;
+    }
+
+    .media-meta,
+    .card-meta,
+    .media-year {
+      font-size: 11px !important;
+    }
+
+    .card-rating {
+      font-size: 10px;
+      padding: 1px 5px;
+    }
+  }
+
+  // ---------------- 筛选器 / 工具条 ----------------
+  // 桌面端这些是一行排开的，手机上是截断重灾区，统一改成换行流式
+
+  .filter-bar,
+  .filters,
+  .toolbar,
+  .movies-toolbar,
+  .series-toolbar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    align-items: center;
+
+    > * {
+      flex: 0 1 auto;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    // 搜索框独占一行
+    .ant-input-search,
+    .search-input,
+    .ant-input-affix-wrapper {
+      flex: 1 1 100% !important;
+      width: 100% !important;
+    }
+
+    // 下拉筛选自动分配宽度
+    .ant-select {
+      flex: 1 1 calc(50% - 4px);
+      min-width: 110px;
+      max-width: calc(50% - 4px);
+    }
+  }
+
+  // 页面内搜索框（电影库/剧集库顶部）
+  .ant-input-search {
+    max-width: 100% !important;
+  }
+
+  // ---------------- 设置 / 加速 ----------------
+
+  .settings-container,
+  .proxy-container {
+    .ant-card-head {
+      min-height: 46px;
+    }
+
+    .ant-descriptions-item-label {
+      width: 96px;
+    }
+
+    // 设置项在窄屏改为上下排列
+    .setting-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+  }
+
+  .proxy-container {
+    .overview-title {
+      font-size: 19px;
+    }
+
+    .overview-desc {
+      font-size: 13px;
+    }
+
+    .status-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .core-row {
+      gap: 10px;
+
+      .port-edit {
+        margin-left: 0;
+      }
+
+      .ant-segmented {
+        width: 100%;
+      }
+    }
+
+    .core-avail {
+      gap: 6px;
+    }
+
+    .node-item {
+      padding: 8px 8px;
+
+      .ant-list-item-action {
+        margin-left: 6px;
+      }
+    }
+  }
+
+  // ---------------- 列表 / 表格 ----------------
+
+  .ant-table {
+    font-size: 13px;
+  }
+
+  // 弹窗在手机上留出边距
+  .ant-modal {
+    max-width: calc(100vw - 24px);
+    margin: 12px auto;
+  }
+
+  // ---------------- 播放器 ----------------
+  // 播放页在手机上是全屏的，控件要够大
+  .player-container,
+  .player-page {
+    .ant-btn {
+      min-width: 40px;
+      min-height: 40px;
+    }
+  }
+}
+
+// 超窄屏（小屏手机竖屏）再收紧一档
+@media screen and (max-width: 374px) {
+  .proxy-container .status-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ---------------- 播放手势反馈 ----------------
+
+// 亮度遮罩：盖在画面上，纯黑，透明度由 JS 控制
+.player-brightness-mask {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.15s ease;
+}
+
+// 手势提示气泡（快进秒数 / 音量 / 亮度）
+.player-gesture-toast {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 30;
+  white-space: nowrap;
+}
+
+// 播放页在手机上占满一屏，信息区可滚动
+@media screen and (max-width: 767px) {
+  .player-container {
+    .video-area {
+      height: 64vw !important;
+      min-height: 200px !important;
+      max-height: 56vh;
+    }
+  }
+
+  // 播放页信息区、选集区在手机上单列排布
+  .player-container {
+    .media-info-area,
+    .episodes-area,
+    .recommended-area {
+      padding: 12px !important;
+    }
+
+    .media-title {
+      font-size: 17px !important;
+    }
+  }
+}

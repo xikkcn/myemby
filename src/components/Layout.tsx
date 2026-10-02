@@ -15,6 +15,7 @@ import {
   LoginOutlined,
   FolderOpenOutlined,
   ThunderboltOutlined,
+  CloudOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useEmbyStore } from '../stores/embyStore';
@@ -22,7 +23,9 @@ import { useServerStore } from '../stores/serverStore';
 import { useMediaLibraryStore, LibraryView } from '../stores/mediaLibraryStore';
 import SearchBar from './SearchBar';
 import Promo from './Promo';
+import MobileNav from './MobileNav';
 import { APP_NAME_CN } from '../config/promo';
+import { useIsMobile } from '../platform/useMobile';
 import logoUrl from '../assets/logo.png';
 import './Layout.scss';
 
@@ -39,6 +42,8 @@ type MenuItem = {
 const Layout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  // 手机端换一套骨架：顶栏精简 + 底部导航
+  const isMobile = useIsMobile();
   const { isLoggedIn, login, logout, username } = useEmbyStore();
   const { servers, activeServerId, setActiveServer } = useServerStore();
   const { libraries, fetchLibraries } = useMediaLibraryStore();
@@ -223,6 +228,16 @@ const Layout: React.FC = () => {
       label: '播放历史',
     },
     {
+      key: '/live',
+      icon: <PlayCircleOutlined />,
+      label: '直播',
+    },
+    {
+      key: '/files',
+      icon: <CloudOutlined />,
+      label: '文件源',
+    },
+    {
       key: '/proxy',
       icon: <ThunderboltOutlined />,
       label: '网络加速',
@@ -252,6 +267,50 @@ const Layout: React.FC = () => {
   }
 
   const isPlayerPage = location.pathname.startsWith('/player/');
+
+  // 播放页在手机上是全屏沉浸的，不套任何外壳
+  if (isMobile && isPlayerPage) {
+    return (
+      <AntLayout className="main-layout mobile mobile-player">
+        <Content className="main-content player-content">
+          <Outlet />
+        </Content>
+      </AntLayout>
+    );
+  }
+
+  // ---------------- 手机端：顶栏精简 + 底部导航 ----------------
+  if (isMobile) {
+    return (
+      <AntLayout className="main-layout mobile">
+        <header className="mobile-header">
+          <div className="mobile-brand" onClick={() => navigate('/')}>
+            <img className="brand-logo" src={logoUrl} alt="myemby" />
+            <span className="app-name">myemby</span>
+          </div>
+          <div className="mobile-header-right">
+            <Dropdown
+              menu={{ items: serverMenuItems, selectedKeys: [activeServerId || ''] }}
+              trigger={['click']}
+            >
+              <button type="button" className="mobile-server-btn">
+                {activeServerId
+                  ? servers.find((s) => s.id === activeServerId)?.name || '服务器'
+                  : '未配置'}{' '}
+                <DownOutlined />
+              </button>
+            </Dropdown>
+          </div>
+        </header>
+
+        <Content className="main-content mobile-content">
+          <Outlet />
+        </Content>
+
+        <MobileNav />
+      </AntLayout>
+    );
+  }
 
   return (
     <AntLayout className="main-layout">

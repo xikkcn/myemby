@@ -39,6 +39,7 @@ function loadPersisted(): Partial<ProxyState> {
       preferredCore: j.preferredCore || 'auto',
       localPort: typeof j.localPort === 'number' ? j.localPort : DEFAULT_LOCAL_PORT,
       lastNodeId: j.lastNodeId ?? null,
+      autoStart: j.autoStart === true,
     };
   } catch {
     return {};
@@ -57,6 +58,8 @@ export interface ProxyState {
   enabled: boolean;
   preferredCore: 'auto' | CoreType;
   localPort: number;
+  /** 启动应用时自动用上次的节点开启加速（电视端尤其有用，省得每次开机手动开） */
+  autoStart: boolean;
 
   // ---- 运行时 ----
   status: ProxyStatus | null;
@@ -76,6 +79,7 @@ export interface ProxyState {
   selectNode: (id: string | null) => void;
   setPreferredCore: (c: 'auto' | CoreType) => void;
   setLocalPort: (p: number) => void;
+  setAutoStart: (v: boolean) => void;
   start: () => Promise<{ ok: boolean; error?: string }>;
   stop: () => Promise<void>;
   toggle: () => Promise<{ ok: boolean; error?: string }>;
@@ -111,6 +115,7 @@ export const useProxyStore = create<ProxyState>((set, get) => {
         lastNodeId: s.lastNodeId,
         preferredCore: s.preferredCore,
         localPort: s.localPort,
+        autoStart: s.autoStart,
       });
       localStorage.setItem(STORE_KEY, encrypt(payload));
     } catch {
@@ -129,6 +134,7 @@ export const useProxyStore = create<ProxyState>((set, get) => {
     enabled: false,
     preferredCore: persisted.preferredCore || 'auto',
     localPort: persisted.localPort || DEFAULT_LOCAL_PORT,
+    autoStart: persisted.autoStart === true,
 
     status: null,
     latency: {},
@@ -244,6 +250,11 @@ export const useProxyStore = create<ProxyState>((set, get) => {
 
     setPreferredCore: (c) => {
       set({ preferredCore: c });
+      persist();
+    },
+
+    setAutoStart: (v) => {
+      set({ autoStart: v });
       persist();
     },
 
@@ -382,6 +393,20 @@ export const useProxyStore = create<ProxyState>((set, get) => {
         if (lines && lines.length) set({ logs: lines });
       } catch {
         /* 忽略 */
+      }
+
+      // 开了「开机自动加速」且已有节点：静默恢复上次的节点。
+      // 电视端用户很少主动进设置页，这一步能省掉每次开机手动开代理。
+      const st = get();
+      if (st.autoStart && !st.status?.running) {
+        const nodeId = st.selectedNodeId || st.lastNodeId;
+        if (nodeId && st.nodes.some((n) => n.id === nodeId)) {
+          try {
+            await get().start();
+          } catch {
+            /* 自动启动失败不打断使用，用户可手动重试 */
+          }
+        }
       }
     },
   };

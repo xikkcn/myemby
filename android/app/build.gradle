@@ -8,8 +8,8 @@ android {
         applicationId "com.myemby.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -40,10 +40,15 @@ android {
     }
 
     /**
-     * 两个维度交叉出四个安装包：
-     *   androidVersion —— modern(Android 5.1+) / legacy(兼容 Android 5.0 的老盒子)
-     *   device          —— phone(手机平板) / tv(电视，锁横屏、带电视启动器)
-     * 电视端单独出包，是因为电视是横屏且有遥控器交互，和手机竖屏的布局策略不同。
+     * 两个维度交叉出六个安装包：
+     *   androidVersion —— modern(Android 5.1+) / legacy(兼容 Android 5.0 的老设备)
+     *   device          —— phone(手机平板，一份通用包) / tv64(64 位电视) / tv32(32 位电视)
+     *
+     * 电视端单独拆成 64 位和 32 位两个包，是因为老电视盒子多为 32 位 ARM，
+     * 装 64 位包会直接失败；反过来新盒子装 32 位包又浪费性能。
+     * 手机端两种架构合在一个包里，省得用户选错。
+     *
+     * 电视端锁定横屏并带 Leanback 启动器，手机端跟随设备旋转。
      */
     flavorDimensions "androidVersion", "device"
 
@@ -60,23 +65,38 @@ android {
         }
         phone {
             dimension "device"
-            // 手机 / 平板：跟随设备自动旋转
+            // 手机 / 平板：跟随设备自动旋转，包里同时带 arm64 与 arm32 核心
             manifestPlaceholders = [orientation: "unspecified"]
+            ndk { abiFilters 'arm64-v8a', 'armeabi-v7a' }
         }
-        tv {
+        tv64 {
             dimension "device"
-            // 电视：强制横屏（sensorLandscape 允许左右翻转，但不会竖过来）
+            // 电视包与手机包用不同 applicationId，两者可以同时装在一个设备上互不覆盖
+            applicationIdSuffix ".tv"
+            // 64 位电视盒子 / 智能电视：强制横屏 + 电视启动器
             manifestPlaceholders = [orientation: "sensorLandscape"]
+            ndk { abiFilters 'arm64-v8a' }
+        }
+        tv32 {
+            dimension "device"
+            applicationIdSuffix ".tv"
+            // 32 位老电视盒子：强制横屏 + 电视启动器
+            manifestPlaceholders = [orientation: "sensorLandscape"]
+            ndk { abiFilters 'armeabi-v7a' }
         }
     }
 
-    // 输出文件名统一成可读的名字
+    // 输出文件名：带上设备类型与架构，一眼能看出该装哪个
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
+            // flavorName 是各维度组合后的字符串，例如 modernTv64 / legacyPhone
             def name = variant.flavorName.toLowerCase()
-            def dev = name.contains('tv') ? 'tv' : 'phone'
+            def dev
+            if (name.contains('tv64')) dev = 'tv-arm64'
+            else if (name.contains('tv32')) dev = 'tv-arm32'
+            else dev = 'phone'
             def ver = name.contains('legacy') ? '-legacy21' : ''
-            outputFileName = "myemby-v${variant.versionName}-${dev}${ver}.apk"
+            outputFileName = "myemby-${variant.versionName}-${dev}${ver}.apk"
         }
     }
 

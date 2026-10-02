@@ -144,7 +144,7 @@ const History: React.FC = () => {
       ) : (
         <Row gutter={[16, 16]}>
           {historyItems.map((item) => (
-            <Col xs={12} sm={8} md={6} lg={4} key={item.Id}>
+            <Col xs={8} sm={6} md={6} lg={4} key={item.Id}>
               <Card
                 hoverable
                 cover={<img alt={item.Name} src={getImageUrl(item)} />}

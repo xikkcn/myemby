@@ -333,9 +333,10 @@ const Home: React.FC = () => {
             查看全部
           </Button>
         </div>
-        <Row gutter={[16, 24]} className="media-items">
+        <Row gutter={[10, 14]} className="media-items">
+          {/* 手机窄屏排 3 列，屏幕变宽后逐步加密 */}
           {group.items.map((item) => (
-            <Col key={item.Id} xs={12} sm={8} md={6} lg={4} xl={4}>
+            <Col key={item.Id} xs={8} sm={6} md={6} lg={4} xl={4}>
               {renderMediaCard(item)}
             </Col>
           ))}

@@ -6,6 +6,7 @@ import { isTVMode } from './platform';
 import { startSpatialNavigation } from './platform/spatialNav';
 import './index.css';
 import './styles/tv.scss';
+import './styles/mobile.scss';
 
 // 电视端：开启遥控器方向键导航
 if (isTVMode()) {

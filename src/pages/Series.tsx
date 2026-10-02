@@ -600,7 +600,7 @@ const Series: React.FC = () => {
         <>
           <Row gutter={[16, 24]} className="series-grid">
             {displayedSeries.map((series) => (
-              <Col key={series.Id} xs={12} sm={8} md={6} lg={4} xl={4}>
+              <Col key={series.Id} xs={8} sm={6} md={6} lg={4} xl={4}>
                 <Card
                   hoverable
                   cover={

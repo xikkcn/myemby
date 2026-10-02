@@ -1,0 +1,61 @@
+// 手机端底部导航
+
+.mobile-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 900;
+  display: flex;
+  align-items: stretch;
+  height: 56px;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-top: 1px solid #ebeef5;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.mobile-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+
+  .nav-icon {
+    font-size: 21px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.18s ease;
+  }
+
+  .nav-label {
+    font-size: 11px;
+    letter-spacing: 0.2px;
+  }
+
+  &:active .nav-icon {
+    transform: scale(0.88);
+  }
+
+  &.active {
+    color: #1677ff;
+
+    .nav-icon {
+      transform: translateY(-1px);
+    }
+  }
+}

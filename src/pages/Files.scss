@@ -1,0 +1,228 @@
+// 文件源（WebDAV / Alist）浏览页
+
+.files-container {
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.files-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+
+  .files-source-name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1f2d3d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.files-alert {
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+
+.files-crumb {
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.files-card {
+  border-radius: 10px;
+  border: 1px solid #ebeef5;
+
+  .files-tip {
+    margin-top: 14px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 12.5px;
+    line-height: 1.8;
+  }
+}
+
+.files-list {
+  background: #fff;
+  border: 1px solid #ebeef5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid #f5f7fa;
+  cursor: pointer;
+  transition: background-color 0.16s ease;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:hover {
+    background: #f7f9fc;
+  }
+
+  &:active {
+    background: #eef3fa;
+  }
+
+  &.playable .file-icon {
+    color: #1677ff;
+  }
+
+  .file-icon {
+    flex: none;
+    font-size: 20px;
+    color: #8c9aad;
+    width: 24px;
+    text-align: center;
+  }
+
+  .file-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .file-name {
+    font-size: 14px;
+    color: #1f2d3d;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .file-sub {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.4);
+  }
+}
+
+// ------------------------------------------------ 源列表行
+
+.source-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px dashed #f0f2f5;
+
+  &:first-of-type {
+    border-top: 0;
+  }
+
+  .source-info {
+    min-width: 0;
+    flex: 1;
+    cursor: pointer;
+  }
+
+  .source-name {
+    font-size: 14px;
+    color: #1f2d3d;
+    font-weight: 500;
+  }
+
+  .source-desc {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.4);
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// ------------------------------------------------ 播放层
+
+.file-player-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+
+  .file-player-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    flex: none;
+
+    .file-player-title {
+      font-size: 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .close-btn {
+      color: #fff;
+
+      &:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.14);
+      }
+    }
+  }
+
+  .file-player-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+
+    .file-video {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      outline: none;
+    }
+
+    .audio-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+
+      .audio-name {
+        color: #fff;
+        font-size: 16px;
+        max-width: 80%;
+        text-align: center;
+        word-break: break-all;
+      }
+    }
+  }
+}
+
+// ------------------------------------------------ 手机端
+
+@media screen and (max-width: 767px) {
+  .files-container {
+    padding: 0;
+  }
+
+  .file-row {
+    padding: 11px 12px;
+
+    .file-name {
+      font-size: 13.5px;
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+	"appId": "com.myemby.app",
+	"appName": "myemby",
+	"webDir": "dist/renderer",
+	"android": {
+		"allowMixedContent": true,
+		"backgroundColor": "#ffffff",
+		"captureInput": true,
+		"webContentsDebuggingEnabled": false
+	},
+	"server": {
+		"androidScheme": "https",
+		"cleartext": true
+	}
+}
