@@ -34,8 +34,8 @@
 
 | 文件 | 适用 |
 | --- | --- |
-| `myemby-v1.0.2-tv-arm64.apk` | 64 位电视 / 盒子（推荐） |
-| `myemby-v1.0.2-tv-arm32.apk` | 32 位电视 / 老盒子 |
+| `myemby-1.0.2-tv-arm64.apk` | 64 位电视 / 盒子（推荐） |
+| `myemby-1.0.2-tv-arm32.apk` | 32 位电视 / 老盒子 |
 
 另有对应的 `legacy21` 版本供 Android 5.0 老系统使用。
 电视端**与手机端使用不同包名**，同一台设备可同时安装、互不覆盖；锁横屏、应用名显示 `myemby TV`。
@@ -85,17 +85,17 @@
 
 | 文件 | 说明 |
 | --- | --- |
-| `myemby-v1.0.2-phone.apk` | Android 5.1（API 22）及以上 |
-| `myemby-v1.0.2-phone-legacy21.apk` | Android 5.0（API 21）老机型 |
+| `myemby-1.0.2-phone.apk` | Android 5.1（API 22）及以上 |
+| `myemby-1.0.2-phone-legacy21.apk` | Android 5.0（API 21）老机型 |
 
 #### Android TV / 电视盒子
 
 | 文件 | 适用 |
 | --- | --- |
-| `myemby-v1.0.2-tv-arm64.apk` | 64 位电视 / 盒子（推荐） |
-| `myemby-v1.0.2-tv-arm32.apk` | 32 位电视 / 老盒子 |
-| `myemby-v1.0.2-tv-arm64-legacy21.apk` | 64 位 + Android 5.0 |
-| `myemby-v1.0.2-tv-arm32-legacy21.apk` | 32 位 + Android 5.0 |
+| `myemby-1.0.2-tv-arm64.apk` | 64 位电视 / 盒子（推荐） |
+| `myemby-1.0.2-tv-arm32.apk` | 32 位电视 / 老盒子 |
+| `myemby-1.0.2-tv-arm64-legacy21.apk` | 64 位 + Android 5.0 |
+| `myemby-1.0.2-tv-arm32-legacy21.apk` | 32 位 + Android 5.0 |
 
 > 不确定自己是 64 位还是 32 位？先试 `arm64`，装不上（提示「应用未安装」）就换 `arm32`。
 > 2018 年以前的老盒子基本都是 32 位。
